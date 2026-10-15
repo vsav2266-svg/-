@@ -81,6 +81,17 @@ form label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px}
 #ok{display:none;margin-top:12px;color:var(--g2);font-weight:600}
 footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut);font-size:12px}
 @media(min-width:700px){.menu,.rv{grid-template-columns:repeat(3,1fr)}.two{grid-template-columns:1fr 1fr}.fgrid{grid-template-columns:1fr 1fr}}
+.fu{animation:fu 1.2s}.fd{animation:fd 1.2s}@keyframes fu{from{background:#21a03866}}@keyframes fd{from{background:#e5484d66}}
+.clock{position:fixed;z-index:20;right:10px;bottom:10px;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:14px;padding:8px 12px;text-align:center;box-shadow:0 4px 24px #0006}
+.clock .ct{font:700 18px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--g2)}
+.clock .cm{font-size:10px;color:var(--mut);letter-spacing:.1em}
+.clock .cd{display:none;margin-top:8px;font-size:13px;line-height:1.35}
+.clock .cd b{display:block;font-size:30px;line-height:1}
+.clock .cq{display:none;margin-top:10px;padding-top:8px;border-top:1px solid var(--line)}
+.clock .cq small{display:block;font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.1em}
+.clock .cq b{font:700 24px/1.2 Georgia,serif;color:var(--g2)}
+.clock .cs{font-size:11px;color:var(--mut)}
+@media(min-width:1280px){.clock{right:16px;top:50%;bottom:auto;transform:translateY(-50%);width:104px;padding:14px 10px}.clock .ct{font-size:20px}.clock .cd,.clock .cq{display:block}.clock .cs{display:none}}
 </style>
 </head>
 <body>
@@ -94,28 +105,28 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut);fon
 <main id="top">
 <div class="wrap hero">
   <h1>Новости → акции: <span>что может двинуть рынок</span></h1>
-  <p>Собираем официальные мировые и российские новости, находим события, влияющие на акции Мосбиржи, и показываем условный прогноз: вырастут, останутся на месте или упадут.</p>
+  <p>Живые котировки акций Мосбиржи обновляются каждые 15 секунд. Простая модель показывает условный прогноз: вырастут, останутся на месте или упадут.</p>
   <a class="btn" href="#companies">Смотреть прогноз</a><a class="btn o" href="#contact">Связаться</a>
   <div class="stats">
-    <div class="stat"><b>128</b><small>новостей</small></div>
-    <div class="stat"><b>14</b><small>событий</small></div>
-    <div class="stat"><b>9 / 5</b><small>вверх / вниз</small></div>
+    <div class="stat"><b id="s1">—</b><small>акций</small></div>
+    <div class="stat"><b id="s2" class="up">—</b><small>растут</small></div>
+    <div class="stat"><b id="s3" class="dn">—</b><small>падают</small></div>
   </div>
 </div>
 
 <section id="menu"><div class="wrap">
   <h2>Меню</h2><p class="sub">Три основных раздела сервиса.</p>
   <div class="grid menu">
-    <a class="card" href="#news"><div class="ic">📰</div><h3>Новости</h3><p>Лента из официальных источников и оценка влияния на бумаги.</p></a>
+    <a class="card" href="#news"><div class="ic">📰</div><h3>Фон рынка</h3><p>Индекс, доля растущих акций, лидеры роста и падения.</p></a>
     <a class="card" href="#companies"><div class="ic">📈</div><h3>Компании</h3><p>Сигнал, вероятность роста и состояние компании по каждой акции.</p></a>
-    <a class="card" href="#method"><div class="ic">🧮</div><h3>Методика</h3><p>Как новости превращаются в прогноз: простые правила, шкала 35–65%.</p></a>
+    <a class="card" href="#method"><div class="ic">🧮</div><h3>Методика</h3><p>Как цены превращаются в прогноз: простые правила, шкала 35–65%.</p></a>
   </div>
 </div></section>
 
 <section id="news"><div class="wrap">
-  <h2>Новостной фон</h2><p class="sub">Усреднённый сигнал по всем бумагам. Это не прогноз индекса.</p>
+  <h2>Фон рынка</h2><p class="sub" id="st">Загрузка данных…</p>
   <div class="card"><div class="gl"><span>Негатив</span><span>Нейтрально</span><span>Позитив</span></div>
-    <div class="gauge"><i></i></div><small style="color:var(--mut)">Сейчас: умеренно позитивный фон</small></div>
+    <div class="gauge"><i id="gi"></i></div><small id="gt" style="color:var(--mut)">Загрузка…</small></div>
 
   <div class="grid two" style="margin-top:14px">
     <div class="card"><h2 class="up" style="font-size:18px">▲ Вероятнее рост</h2><div id="upl"></div></div>
@@ -123,10 +134,7 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut);fon
   </div>
 
   <div class="grid two" style="margin-top:14px">
-    <div class="card"><h2 style="font-size:18px">Главные события</h2>
-      <div class="ev">ЦБ РФ сохранил ключевую ставку <span class="tag up">банки ▲</span><br><small>Банк России · сегодня</small></div>
-      <div class="ev">Рост цен на нефть Brent <span class="tag up">нефтегаз ▲</span><br><small>Мировые новости · сегодня</small></div>
-      <div class="ev">Новые ограничения на экспорт металлов <span class="tag dn">металлы ▼</span><br><small>Официальные источники · вчера</small></div>
+    <div class="card"><h2 style="font-size:18px">Главные движения дня</h2><p class="sub" style="margin-bottom:4px">Самые торгуемые бумаги по обороту.</p><div id="evs"></div>
     </div>
     <div class="card" id="method"><h2 style="font-size:18px">Отрасли</h2><p class="sub" style="margin-bottom:4px">Средний сигнал: от −1 до +1.</p><div id="secs"></div></div>
   </div>
@@ -137,9 +145,10 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut);fon
   <div class="tools">
     <input id="q" placeholder="Поиск по тикеру или названию">
     <select id="f"><option value="">Любой прогноз</option><option value="up">Рост</option><option value="fl">На месте</option><option value="dn">Снижение</option></select>
-    <select id="s"><option value="p">По вероятности роста</option><option value="n">По названию</option><option value="c">По цене</option></select>
+    <select id="s"><option value="v">По обороту</option><option value="p">По вероятности роста</option><option value="d">По изменению за день</option><option value="n">По названию</option><option value="c">По цене</option></select>
   </div>
-  <div class="card tw"><table><thead><tr><th>Тикер</th><th>Компания</th><th>Цена, ₽</th><th>30 дн.</th><th>Прогноз</th><th>Вер. роста</th></tr></thead><tbody id="tb"></tbody></table></div>
+  <div class="card tw"><table><thead><tr><th>Тикер</th><th>Компания</th><th>Цена, ₽</th><th>За день</th><th>30 дн.</th><th>Прогноз</th><th>Вер. роста</th></tr></thead><tbody id="tb"></tbody></table></div>
+  <div style="text-align:center;margin-top:12px"><button class="btn o" id="more" type="button" style="margin:0">Показать ещё</button></div>
 </div></section>
 
 <section id="reviews"><div class="wrap">
@@ -166,27 +175,132 @@ footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut);fon
 </div></section>
 </main>
 
+<aside class="clock" id="clk" aria-label="Дата и время">
+  <div class="ct" id="ct">--:--:--</div><div class="cm">МСК</div>
+  <div class="cs" id="cs"></div>
+  <div class="cd"><b id="cdd">—</b><span id="cmo"></span><br><span id="cyr" style="color:var(--mut)"></span></div>
+  <div class="cq"><small>Квартал</small><b id="cq">—</b></div>
+</aside>
+
 <footer><div class="wrap">
   <p><b>Важно:</b> все данные, оценки и прогнозы — примерные, получены автоматически и могут быть неточными. Материалы не являются инвестиционной рекомендацией, офертой или советом покупать либо продавать ценные бумаги. Решения вы принимаете на свой риск.</p>
-  <p style="margin-top:10px">Новости — публичные ленты изданий. Рыночные данные — Мосбиржа, с задержкой не менее 15 минут. © 2026 «Радар Рынка» · 18+</p>
+  <p style="margin-top:10px">Рыночные данные — ПАО «Московская Биржа» (ISS), с задержкой не менее 15 минут, справочно. Прогноз — упрощённая модель по ценам, она не учитывает новости. © 2026 «Радар Рынка» · 18+</p>
 </div></footer>
 
 <script>
-// Демо-данные (замените на реальные из вашего API)
-const D=[["SBER","Сбербанк",312.4,[1,2,1,3,4,3,5,6],.64],["GAZP","Газпром",128.9,[5,4,4,3,3,2,2,1],.38],["LKOH","Лукойл",7120,[2,3,3,4,4,5,5,6],.61],["GMKN","Норникель",118.6,[4,5,4,3,3,3,2,2],.42],["YDEX","Яндекс",4210,[1,2,3,3,4,5,5,6],.63],["ROSN","Роснефть",561.2,[3,3,4,4,3,4,4,5],.55],["MTSS","МТС",224.7,[3,3,3,3,3,3,3,3],.50],["MGNT","Магнит",4380,[5,5,4,4,3,3,3,2],.40]];
+const API="https://iss.moex.com/iss/engines/stock/markets/shares/boards/TQBR/securities";
+const IDX="https://iss.moex.com/iss/engines/stock/markets/index/boards/SNDX/securities/IMOEX.json?iss.meta=off&iss.only=marketdata&marketdata.columns=SECID,CURRENTVALUE,LASTCHANGEPRC";
+const SECT={};
+[["Банки","SBER SBERP VTBR T TCSG CBOM BSPB MBNK"],["Нефтегаз","GAZP LKOH ROSN SNGS SNGSP TATN TATNP SIBN NVTK TRNFP BANE BANEP"],["Металлы","GMKN NLMK CHMF MAGN PLZL ALRS RUAL MTLR UGLD"],["IT","YDEX OZON VKCO POSI HEAD ASTR CNRU"],["Ритейл","MGNT X5 LENT FIXP"],["Телеком","MTSS RTKM"],["Энергетика","IRAO HYDR FEES MSNG"],["Строительство","PIKK SMLT LSRG"],["Химия","PHOR AKRN NKNC"],["Транспорт","AFLT FLOT NMTP"]].forEach(([n,l])=>l.split(" ").forEach(t=>SECT[t]=n));
+const S={rows:[],idx:null,candles:{},req:new Set(),prev:{},limit:30,upd:""};
 const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const cls=p=>p>=.55?"up":p<=.45?"dn":"fl";
 const lbl=p=>p>=.55?"▲ Рост":p<=.45?"▼ Снижение":"► На месте";
-const spark=a=>{const mx=Math.max(...a),mn=Math.min(...a),pts=a.map((v,i)=>`${i*10},${22-(v-mn)/((mx-mn)||1)*20}`).join(" ");const c=a[a.length-1]>=a[0]?"#2ed151":"#e5484d";return `<svg width="70" height="24" viewBox="0 0 70 24"><polyline fill="none" stroke="${c}" stroke-width="2" points="${pts}"/></svg>`};
-function top(){const s=[...D].sort((a,b)=>b[4]-a[4]);const r=(x)=>`<div class="row"><span class="tk">${x[0]}</span><span class="nm">${x[1]}</span><b class="${cls(x[4])}">${Math.round(x[4]*100)}%</b></div>`;
-$("#upl").innerHTML=s.slice(0,3).map(r).join("");$("#dnl").innerHTML=s.slice(-3).reverse().map(r).join("")}
-function table(){const q=$("#q").value.toLowerCase(),f=$("#f").value,s=$("#s").value;
-let l=D.filter(x=>(x[0]+x[1]).toLowerCase().includes(q)&&(!f||cls(x[4])===f));
-l.sort((a,b)=>s==="n"?a[1].localeCompare(b[1]):s==="c"?b[2]-a[2]:b[4]-a[4]);
-$("#tb").innerHTML=l.map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td>${x[2]}</td><td>${spark(x[3])}</td><td class="${cls(x[4])}">${lbl(x[4])}</td><td>${Math.round(x[4]*100)}%</td></tr>`).join("")||`<tr><td colspan="6">Ничего не найдено</td></tr>`}
-[["Банки",.4],["Нефтегаз",.25],["Металлы",-.35],["IT",.5],["Ритейл",-.1]].forEach(([n,v])=>{const w=Math.abs(v)*50;$("#secs").insertAdjacentHTML("beforeend",`<div class="sec"><span>${n}</span><div class="sb"><i style="${v>=0?"left:50%":"right:50%"};width:${w}%;background:${v>=0?"var(--g2)":"var(--red)"}"></i></div><b class="${v>=0?"up":"dn"}">${v>0?"+":""}${v}</b></div>`)});
-["q","f","s"].forEach(i=>$("#"+i).addEventListener("input",table));
-top();table();
+const nf=(v,d=2)=>Number(v).toLocaleString("ru-RU",{maximumFractionDigits:d});
+const sg=v=>(v>0?"+":"")+nf(v)+"%";
+const j=async u=>{const r=await fetch(u);if(!r.ok)throw new Error(r.status);return r.json()};
+const rows=o=>o.data.map(r=>Object.fromEntries(o.columns.map((c,i)=>[c,r[i]])));
+const spark=a=>{if(!a||a.length<3)return "—";const mx=Math.max(...a),mn=Math.min(...a),st=68/(a.length-1),pts=a.map((v,i)=>`${(i*st).toFixed(1)},${(22-(v-mn)/((mx-mn)||1)*20).toFixed(1)}`).join(" ");const c=a[a.length-1]>=a[0]?"#2ed151":"#e5484d";return `<svg width="70" height="24" viewBox="0 0 70 24"><polyline fill="none" stroke="${c}" stroke-width="2" points="${pts}"/></svg>`};
+
+// Упрощённая модель: день + положение в диапазоне дня + тренд 30 дн. + индекс -> шкала 35–65%
+function pred(r){
+  const rng=(r.hi&&r.lo&&r.hi>r.lo)?(r.price-r.lo)/(r.hi-r.lo)-.5:0;
+  const c=S.candles[r.t];
+  const tr=c&&c.length>5?(c[c.length-1]/c[0]-1)*100:0;
+  const ix=S.idx?S.idx.chg:0;
+  return .5+.15*Math.tanh(r.chg/2+rng*1.2+tr/10+ix*.15);
+}
+
+async function load(){
+  try{
+    const [d,ix]=await Promise.all([
+      j(API+".json?iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SHORTNAME,PREVPRICE&marketdata.columns=SECID,LAST,HIGH,LOW,LASTTOPREVPRICE,VALTODAY,UPDATETIME"),
+      j(IDX).catch(()=>null)
+    ]);
+    const m={};rows(d.securities).forEach(x=>m[x.SECID]=x);
+    const old=S.prev;S.prev={};
+    S.rows=rows(d.marketdata).filter(x=>x.LAST!=null).map(x=>{
+      const q=m[x.SECID]||{};
+      let chg=x.LASTTOPREVPRICE;
+      if(chg==null&&q.PREVPRICE)chg=(x.LAST/q.PREVPRICE-1)*100;
+      S.prev[x.SECID]=x.LAST;
+      return{t:x.SECID,n:q.SHORTNAME||x.SECID,price:x.LAST,chg:chg||0,hi:x.HIGH,lo:x.LOW,val:x.VALTODAY||0,fl:old[x.SECID]==null||old[x.SECID]===x.LAST?"":(x.LAST>old[x.SECID]?"fu":"fd")};
+    });
+    if(ix){const r=rows(ix.marketdata)[0];if(r)S.idx={v:r.CURRENTVALUE,chg:r.LASTCHANGEPRC||0}}
+    S.upd=new Date().toLocaleTimeString("ru-RU");
+    $("#st").textContent=`Обновлено в ${S.upd}. Данные Мосбиржи идут с задержкой не менее 15 минут; обновление каждые 15 секунд.`;
+    render();
+    const top=[...S.rows].sort((a,b)=>b.val-a.val).slice(0,40).map(r=>r.t);
+    loadCandles(top);
+  }catch(e){
+    $("#st").textContent="Не удалось получить данные Мосбиржи. Повторим через 15 секунд.";
+  }
+}
+
+async function loadCandles(list){
+  list=list.filter(t=>!S.req.has(t));list.forEach(t=>S.req.add(t));
+  if(!list.length)return;
+  const from=new Date(Date.now()-50*864e5).toISOString().slice(0,10);
+  let i=0;
+  const w=async()=>{while(i<list.length){const t=list[i++];
+    try{const d=await j(`${API}/${t}/candles.json?interval=24&from=${from}&iss.meta=off&candles.columns=close`);S.candles[t]=d.candles.data.map(x=>x[0]).slice(-30)}
+    catch(e){S.candles[t]=[]}}};
+  await Promise.all([w(),w(),w(),w(),w()]);
+  render();
+}
+
+function render(){
+  const R=S.rows.map(r=>({...r,p:pred(r)}));
+  const up=R.filter(r=>r.chg>0).length,dn=R.filter(r=>r.chg<0).length;
+  $("#s1").textContent=R.length;$("#s2").textContent=up;$("#s3").textContent=dn;
+  const br=R.length?up/Math.max(up+dn,1):.5;
+  $("#gi").style.left=`calc(${(br*100).toFixed(0)}% - 2px)`;
+  $("#gt").textContent=`Растут ${up} из ${R.length}`+(S.idx?` · Индекс Мосбиржи ${nf(S.idx.v)} (${sg(S.idx.chg)})`:"");
+
+  const liq=[...R].sort((a,b)=>b.val-a.val);
+  const pool=liq.slice(0,100).sort((a,b)=>b.p-a.p);
+  const li=x=>`<div class="row"><span class="tk">${esc(x.t)}</span><span class="nm">${esc(x.n)}</span><b class="${cls(x.p)}">${Math.round(x.p*100)}%</b></div>`;
+  $("#upl").innerHTML=pool.slice(0,5).map(li).join("");
+  $("#dnl").innerHTML=pool.slice(-5).reverse().map(li).join("");
+  $("#evs").innerHTML=liq.slice(0,5).map(x=>`<div class="ev"><b>${esc(x.t)}</b> ${esc(x.n)} <span class="tag ${x.chg>=0?"up":"dn"}">${sg(x.chg)}</span><br><small>Оборот ${nf(x.val/1e6,0)} млн ₽ · цена ${nf(x.price)} ₽</small></div>`).join("");
+
+  const g={};R.forEach(r=>{const k=SECT[r.t];if(k)(g[k]=g[k]||[]).push((r.p-.5)/.15)});
+  $("#secs").innerHTML=Object.entries(g).map(([n,a])=>[n,a.reduce((x,y)=>x+y,0)/a.length]).sort((a,b)=>b[1]-a[1]).map(([n,v])=>{
+    v=Math.round(v*100)/100;
+    return `<div class="sec"><span>${n}</span><div class="sb"><i style="${v>=0?"left:50%":"right:50%"};width:${Math.abs(v)*50}%;background:${v>=0?"var(--g2)":"var(--red)"}"></i></div><b class="${v>=0?"up":"dn"}">${v>0?"+":""}${v}</b></div>`}).join("");
+  table(R);
+}
+
+function table(R){
+  R=R||S.rows.map(r=>({...r,p:pred(r)}));
+  const q=$("#q").value.toLowerCase(),f=$("#f").value,s=$("#s").value;
+  let l=R.filter(x=>(x.t+x.n).toLowerCase().includes(q)&&(!f||cls(x.p)===f));
+  l.sort((a,b)=>s==="n"?a.n.localeCompare(b.n,"ru"):s==="c"?b.price-a.price:s==="p"?b.p-a.p:s==="d"?b.chg-a.chg:b.val-a.val);
+  const vis=l.slice(0,S.limit);
+  $("#more").style.display=l.length>S.limit?"inline-block":"none";
+  $("#tb").innerHTML=vis.map(x=>`<tr><td><b>${esc(x.t)}</b></td><td>${esc(x.n)}</td><td class="${x.fl}">${nf(x.price)}</td><td class="${x.chg>=0?"up":"dn"}">${sg(x.chg)}</td><td>${spark(S.candles[x.t])}</td><td class="${cls(x.p)}">${lbl(x.p)}</td><td>${Math.round(x.p*100)}%</td></tr>`).join("")||`<tr><td colspan="7">${S.rows.length?"Ничего не найдено":"Загрузка…"}</td></tr>`;
+  loadCandles(vis.map(x=>x.t));
+}
+
+["q","f","s"].forEach(i=>$("#"+i).addEventListener("input",()=>{S.limit=30;table()}));
+$("#more").onclick=()=>{S.limit+=30;table()};
+load();
+setInterval(()=>{if(!document.hidden)load()},15000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)load()});
+
+// Часы, дата и квартал (время Москвы)
+const ROM=["","I","II","III","IV"],MON=["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+const fT=new Intl.DateTimeFormat("ru-RU",{timeZone:"Europe/Moscow",hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23"});
+const fD=new Intl.DateTimeFormat("en-GB",{timeZone:"Europe/Moscow",day:"numeric",month:"numeric",year:"numeric"});
+function tick(){
+  const n=new Date(),g={};fD.formatToParts(n).forEach(x=>g[x.type]=+x.value);
+  const q=ROM[Math.ceil(g.month/3)];
+  $("#ct").textContent=fT.format(n);
+  $("#cdd").textContent=g.day;$("#cmo").textContent=MON[g.month-1];$("#cyr").textContent=g.year;$("#cq").textContent=q;
+  $("#cs").textContent=`${g.day} ${MON[g.month-1]} ${g.year} · ${q} кв.`;
+}
+tick();setInterval(tick,1000);
 
 // Тема
 const root=document.documentElement,mq=matchMedia("(prefers-color-scheme: dark)");
