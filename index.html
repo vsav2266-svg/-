@@ -1,1 +1,412 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark"><!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#21a038">
+<title>Радар Рынка — новости → акции Мосбиржи</title>
+<meta name="description" content="Сбор официальных новостей и условный прогноз по акциям: вырастут, останутся на месте или упадут. Данные примерные.">
+<style>
+:root{--g:#21a038;--g2:#2ed151;--bg:#0a0d0b;--card:#121714;--line:#1f2a23;--tx:#e8f0ea;--mut:#8a9a8f;--red:#e5484d;--yel:#d9a21b}
+[data-theme=light]{--bg:#f4f7f5;--card:#fff;--line:#dbe4de;--tx:#0d1a12;--mut:#5b6b60}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx);line-height:1.5}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1100px;margin:auto;padding:0 16px}
+.warn{background:#1a1505;color:#e8c766;font-size:13px;padding:8px 16px;text-align:center}
+[data-theme=light] .warn{background:#fff6d6;color:#6b5200}
+header{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:12px;height:56px}
+.logo{font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px}
+.logo i{width:12px;height:12px;border-radius:50%;background:var(--g);box-shadow:0 0 12px var(--g)}
+nav{display:none;gap:16px;margin-left:auto;font-size:14px;color:var(--mut)}
+nav a:hover{color:var(--g2)}
+.theme{margin-left:auto;display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.theme button{background:none;border:0;color:var(--mut);padding:6px 10px;font-size:12px;cursor:pointer}
+.theme button.on{background:var(--g);color:#fff}
+@media(min-width:800px){nav{display:flex}.theme{margin-left:0}}
+.hero{padding:40px 0 24px}
+h1{font-size:clamp(26px,6vw,46px);line-height:1.15;max-width:800px}
+h1 span{color:var(--g2)}
+.hero p{color:var(--mut);margin:14px 0 20px;max-width:680px}
+.btn{display:inline-block;background:var(--g);color:#fff;border:0;border-radius:10px;padding:11px 20px;font-weight:600;cursor:pointer;font-size:15px}
+.btn:hover{background:var(--g2)}
+.btn.o{background:none;border:1px solid var(--line);color:var(--tx);margin-left:8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:26px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.stat b{display:block;font-size:clamp(20px,5vw,30px);color:var(--g2)}
+.stat small{color:var(--mut);font-size:12px}
+section{padding:32px 0}
+h2{font-size:22px;margin-bottom:6px}
+.sub{color:var(--mut);font-size:14px;margin-bottom:16px}
+.grid{display:grid;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.menu a.card{display:block;transition:.2s}
+.menu a.card:hover{border-color:var(--g);transform:translateY(-3px)}
+.menu .ic{font-size:26px}
+.menu h3{margin:8px 0 4px}
+.menu p{color:var(--mut);font-size:14px}
+.gauge{height:12px;border-radius:99px;background:linear-gradient(90deg,var(--red),var(--yel),var(--g2));position:relative;margin:16px 0 6px}
+.gauge i{position:absolute;top:-4px;width:4px;height:20px;background:var(--tx);border-radius:2px;left:62%}
+.gl{display:flex;justify-content:space-between;font-size:12px;color:var(--mut)}
+.row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border:0}
+.tk{font-weight:700;width:58px}
+.nm{flex:1;color:var(--mut);font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.up{color:var(--g2)}.dn{color:var(--red)}.fl{color:var(--yel)}
+.ev{padding:12px 0;border-bottom:1px solid var(--line)}
+.ev:last-child{border:0}
+.ev small{color:var(--mut)}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;border:1px solid currentColor;margin-left:6px}
+.sec{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:14px}
+.sec span:first-child{width:110px}
+.sb{flex:1;height:8px;background:var(--line);border-radius:9px;position:relative}
+.sb i{position:absolute;top:0;height:100%;border-radius:9px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+select,input,textarea{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;width:100%}
+.tools select,.tools input{width:auto;flex:1;min-width:140px}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--g);border-color:transparent}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 8px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--mut);font-weight:500;font-size:12px}
+.tw{overflow-x:auto}
+.rev{font-size:14px}
+.rev q{display:block;margin-bottom:10px}
+.rev small{color:var(--mut)}
+.stars{color:var(--yel);letter-spacing:2px}
+form label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px}
+.err{color:var(--red);font-size:12px;min-height:16px}
+.bad{border-color:var(--red)!important}
+#ok{display:none;margin-top:12px;color:var(--g2);font-weight:600}
+footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut);font-size:12px}
+@media(min-width:700px){.menu,.rv{grid-template-columns:repeat(3,1fr)}.two{grid-template-columns:1fr 1fr}.fgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="warn">⚠ Данные примерные и не являются инвестиционной рекомендацией.</div>
+<header><div class="wrap bar">
+  <a class="logo" href="#top"><i></i>Радар Рынка</a>
+  <nav><a href="#menu">Обзор</a><a href="#news">Новости</a><a href="#companies">Компании</a><a href="#reviews">Отзывы</a><a href="#contact">Контакты</a></nav>
+  <div class="theme" id="theme"><button data-t="light">Светлая</button><button data-t="dark" class="on">Тёмная</button><button data-t="auto">Авто</button></div>
+</div></header>
 
+<main id="top">
+<div class="wrap hero">
+  <h1>Новости → акции: <span>что может двинуть рынок</span></h1>
+  <p>Собираем официальные мировые и российские новости, находим события, влияющие на акции Мосбиржи, и показываем условный прогноз: вырастут, останутся на месте или упадут.</p>
+  <a class="btn" href="#companies">Смотреть прогноз</a><a class="btn o" href="#contact">Связаться</a>
+  <div class="stats">
+    <div class="stat"><b>128</b><small>новостей</small></div>
+    <div class="stat"><b>14</b><small>событий</small></div>
+    <div class="stat"><b>9 / 5</b><small>вверх / вниз</small></div>
+  </div>
+</div>
+
+<section id="menu"><div class="wrap">
+  <h2>Меню</h2><p class="sub">Три основных раздела сервиса.</p>
+  <div class="grid menu">
+    <a class="card" href="#news"><div class="ic">📰</div><h3>Новости</h3><p>Лента из официальных источников и оценка влияния на бумаги.</p></a>
+    <a class="card" href="#companies"><div class="ic">📈</div><h3>Компании</h3><p>Сигнал, вероятность роста и состояние компании по каждой акции.</p></a>
+    <a class="card" href="#method"><div class="ic">🧮</div><h3>Методика</h3><p>Как новости превращаются в прогноз: простые правила, шкала 35–65%.</p></a>
+  </div>
+</div></section>
+
+<section id="news"><div class="wrap">
+  <h2>Новостной фон</h2><p class="sub">Усреднённый сигнал по всем бумагам. Это не прогноз индекса.</p>
+  <div class="card"><div class="gl"><span>Негатив</span><span>Нейтрально</span><span>Позитив</span></div>
+    <div class="gauge"><i></i></div><small style="color:var(--mut)">Сейчас: умеренно позитивный фон</small></div>
+
+  <div class="grid two" style="margin-top:14px">
+    <div class="card"><h2 class="up" style="font-size:18px">▲ Вероятнее рост</h2><div id="upl"></div></div>
+    <div class="card"><h2 class="dn" style="font-size:18px">▼ Вероятнее снижение</h2><div id="dnl"></div></div>
+  </div>
+
+  <div class="grid two" style="margin-top:14px">
+    <div class="card"><h2 style="font-size:18px">Главные события</h2>
+      <div class="ev">ЦБ РФ сохранил ключевую ставку <span class="tag up">банки ▲</span><br><small>Банк России · сегодня</small></div>
+      <div class="ev">Рост цен на нефть Brent <span class="tag up">нефтегаз ▲</span><br><small>Мировые новости · сегодня</small></div>
+      <div class="ev">Новые ограничения на экспорт металлов <span class="tag dn">металлы ▼</span><br><small>Официальные источники · вчера</small></div>
+    </div>
+    <div class="card" id="method"><h2 style="font-size:18px">Отрасли</h2><p class="sub" style="margin-bottom:4px">Средний сигнал: от −1 до +1.</p><div id="secs"></div></div>
+  </div>
+</div></section>
+
+<section id="companies"><div class="wrap">
+  <h2>Компании</h2>
+  <div class="tools">
+    <input id="q" placeholder="Поиск по тикеру или названию">
+    <select id="f"><option value="">Любой прогноз</option><option value="up">Рост</option><option value="fl">На месте</option><option value="dn">Снижение</option></select>
+    <select id="s"><option value="p">По вероятности роста</option><option value="n">По названию</option><option value="c">По цене</option></select>
+  </div>
+  <div class="card tw"><table><thead><tr><th>Тикер</th><th>Компания</th><th>Цена, ₽</th><th>30 дн.</th><th>Прогноз</th><th>Вер. роста</th></tr></thead><tbody id="tb"></tbody></table></div>
+</div></section>
+
+<section id="reviews"><div class="wrap">
+  <h2>Отзывы</h2><p class="sub">Что говорят инвесторы и аналитики.</p>
+  <div class="grid rv">
+    <div class="card rev"><div class="stars">★★★★★</div><q>Удобно видеть сразу новость и её влияние на бумагу. Экономит время на утреннем обзоре.</q><small>Алексей, частный инвестор</small></div>
+    <div class="card rev"><div class="stars">★★★★★</div><q>Простая и честная методика, без обещаний «гарантированной доходности». Это ценно.</q><small>Марина, аналитик</small></div>
+    <div class="card rev"><div class="stars">★★★★☆</div><q>Хороший отправной пункт для идей. Хотелось бы больше источников и дивиденды.</q><small>Игорь, трейдер</small></div>
+  </div>
+</div></section>
+
+<section id="contact"><div class="wrap">
+  <h2>Обратная связь</h2><p class="sub">Напишите нам — ответим на почту.</p>
+  <form class="card" id="form" novalidate style="max-width:640px">
+    <div class="grid fgrid">
+      <div><label for="n">Имя</label><input id="n" placeholder="Иван"><div class="err" id="en"></div></div>
+      <div><label for="e">Email</label><input id="e" type="email" placeholder="you@mail.ru"><div class="err" id="ee"></div></div>
+    </div>
+    <label for="m">Сообщение</label><textarea id="m" rows="4" placeholder="Ваш вопрос или идея"></textarea><div class="err" id="em"></div>
+    <label style="display:flex;gap:8px;align-items:center"><input id="c" type="checkbox" style="width:auto"> Согласен на обработку данных</label><div class="err" id="ec"></div>
+    <button class="btn" type="submit" style="margin-top:8px">Отправить</button>
+    <div id="ok">✓ Спасибо! Сообщение отправлено.</div>
+  </form>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p><b>Важно:</b> все данные, оценки и прогнозы — примерные, получены автоматически и могут быть неточными. Материалы не являются инвестиционной рекомендацией, офертой или советом покупать либо продавать ценные бумаги. Решения вы принимаете на свой риск.</p>
+  <p style="margin-top:10px">Новости — публичные ленты изданий. Рыночные данные — Мосбиржа, с задержкой не менее 15 минут. © 2026 «Радар Рынка» · 18+</p>
+</div></footer>
+
+<script>
+// Демо-данные (замените на реальные из вашего API)
+const D=[["SBER","Сбербанк",312.4,[1,2,1,3,4,3,5,6],.64],["GAZP","Газпром",128.9,[5,4,4,3,3,2,2,1],.38],["LKOH","Лукойл",7120,[2,3,3,4,4,5,5,6],.61],["GMKN","Норникель",118.6,[4,5,4,3,3,3,2,2],.42],["YDEX","Яндекс",4210,[1,2,3,3,4,5,5,6],.63],["ROSN","Роснефть",561.2,[3,3,4,4,3,4,4,5],.55],["MTSS","МТС",224.7,[3,3,3,3,3,3,3,3],.50],["MGNT","Магнит",4380,[5,5,4,4,3,3,3,2],.40]];
+const $=s=>document.querySelector(s);
+const cls=p=>p>=.55?"up":p<=.45?"dn":"fl";
+const lbl=p=>p>=.55?"▲ Рост":p<=.45?"▼ Снижение":"► На месте";
+const spark=a=>{const mx=Math.max(...a),mn=Math.min(...a),pts=a.map((v,i)=>`${i*10},${22-(v-mn)/((mx-mn)||1)*20}`).join(" ");const c=a[a.length-1]>=a[0]?"#2ed151":"#e5484d";return `<svg width="70" height="24" viewBox="0 0 70 24"><polyline fill="none" stroke="${c}" stroke-width="2" points="${pts}"/></svg>`};
+function top(){const s=[...D].sort((a,b)=>b[4]-a[4]);const r=(x)=>`<div class="row"><span class="tk">${x[0]}</span><span class="nm">${x[1]}</span><b class="${cls(x[4])}">${Math.round(x[4]*100)}%</b></div>`;
+$("#upl").innerHTML=s.slice(0,3).map(r).join("");$("#dnl").innerHTML=s.slice(-3).reverse().map(r).join("")}
+function table(){const q=$("#q").value.toLowerCase(),f=$("#f").value,s=$("#s").value;
+let l=D.filter(x=>(x[0]+x[1]).toLowerCase().includes(q)&&(!f||cls(x[4])===f));
+l.sort((a,b)=>s==="n"?a[1].localeCompare(b[1]):s==="c"?b[2]-a[2]:b[4]-a[4]);
+$("#tb").innerHTML=l.map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td>${x[2]}</td><td>${spark(x[3])}</td><td class="${cls(x[4])}">${lbl(x[4])}</td><td>${Math.round(x[4]*100)}%</td></tr>`).join("")||`<tr><td colspan="6">Ничего не найдено</td></tr>`}
+[["Банки",.4],["Нефтегаз",.25],["Металлы",-.35],["IT",.5],["Ритейл",-.1]].forEach(([n,v])=>{const w=Math.abs(v)*50;$("#secs").insertAdjacentHTML("beforeend",`<div class="sec"><span>${n}</span><div class="sb"><i style="${v>=0?"left:50%":"right:50%"};width:${w}%;background:${v>=0?"var(--g2)":"var(--red)"}"></i></div><b class="${v>=0?"up":"dn"}">${v>0?"+":""}${v}</b></div>`)});
+["q","f","s"].forEach(i=>$("#"+i).addEventListener("input",table));
+top();table();
+
+// Тема
+const root=document.documentElement,mq=matchMedia("(prefers-color-scheme: dark)");
+function setTheme(t){document.querySelectorAll("#theme button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));root.dataset.theme=t==="auto"?(mq.matches?"dark":"light"):t}
+document.querySelectorAll("#theme button").forEach(b=>b.onclick=()=>setTheme(b.dataset.t));
+
+// Валидация формы
+$("#form").addEventListener("submit",e=>{e.preventDefault();let ok=true;
+const chk=(id,er,bad,msg)=>{$("#"+er).textContent=bad?msg:"";$("#"+id).classList.toggle("bad",bad);if(bad)ok=false};
+chk("n","en",$("#n").value.trim().length<2,"Введите имя (мин. 2 символа)");
+chk("e","ee",!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test($("#e").value.trim()),"Введите корректный email");
+chk("m","em",$("#m").value.trim().length<10,"Сообщение — минимум 10 символов");
+chk("c","ec",!$("#c").checked,"Необходимо согласие");
+$("#ok").style.display=ok?"block":"none";if(ok)e.target.reset()});
+</script>
+</body>
+</html>
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#21a038">
+<title>Радар Рынка — новости → акции Мосбиржи</title>
+<meta name="description" content="Сбор официальных новостей и условный прогноз по акциям: вырастут, останутся на месте или упадут. Данные примерные.">
+<style>
+:root{--g:#21a038;--g2:#2ed151;--bg:#0a0d0b;--card:#121714;--line:#1f2a23;--tx:#e8f0ea;--mut:#8a9a8f;--red:#e5484d;--yel:#d9a21b}
+[data-theme=light]{--bg:#f4f7f5;--card:#fff;--line:#dbe4de;--tx:#0d1a12;--mut:#5b6b60}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--tx);line-height:1.5}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1100px;margin:auto;padding:0 16px}
+.warn{background:#1a1505;color:#e8c766;font-size:13px;padding:8px 16px;text-align:center}
+[data-theme=light] .warn{background:#fff6d6;color:#6b5200}
+header{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:12px;height:56px}
+.logo{font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px}
+.logo i{width:12px;height:12px;border-radius:50%;background:var(--g);box-shadow:0 0 12px var(--g)}
+nav{display:none;gap:16px;margin-left:auto;font-size:14px;color:var(--mut)}
+nav a:hover{color:var(--g2)}
+.theme{margin-left:auto;display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.theme button{background:none;border:0;color:var(--mut);padding:6px 10px;font-size:12px;cursor:pointer}
+.theme button.on{background:var(--g);color:#fff}
+@media(min-width:800px){nav{display:flex}.theme{margin-left:0}}
+.hero{padding:40px 0 24px}
+h1{font-size:clamp(26px,6vw,46px);line-height:1.15;max-width:800px}
+h1 span{color:var(--g2)}
+.hero p{color:var(--mut);margin:14px 0 20px;max-width:680px}
+.btn{display:inline-block;background:var(--g);color:#fff;border:0;border-radius:10px;padding:11px 20px;font-weight:600;cursor:pointer;font-size:15px}
+.btn:hover{background:var(--g2)}
+.btn.o{background:none;border:1px solid var(--line);color:var(--tx);margin-left:8px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:26px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center}
+.stat b{display:block;font-size:clamp(20px,5vw,30px);color:var(--g2)}
+.stat small{color:var(--mut);font-size:12px}
+section{padding:32px 0}
+h2{font-size:22px;margin-bottom:6px}
+.sub{color:var(--mut);font-size:14px;margin-bottom:16px}
+.grid{display:grid;gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.menu a.card{display:block;transition:.2s}
+.menu a.card:hover{border-color:var(--g);transform:translateY(-3px)}
+.menu .ic{font-size:26px}
+.menu h3{margin:8px 0 4px}
+.menu p{color:var(--mut);font-size:14px}
+.gauge{height:12px;border-radius:99px;background:linear-gradient(90deg,var(--red),var(--yel),var(--g2));position:relative;margin:16px 0 6px}
+.gauge i{position:absolute;top:-4px;width:4px;height:20px;background:var(--tx);border-radius:2px;left:62%}
+.gl{display:flex;justify-content:space-between;font-size:12px;color:var(--mut)}
+.row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border:0}
+.tk{font-weight:700;width:58px}
+.nm{flex:1;color:var(--mut);font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.up{color:var(--g2)}.dn{color:var(--red)}.fl{color:var(--yel)}
+.ev{padding:12px 0;border-bottom:1px solid var(--line)}
+.ev:last-child{border:0}
+.ev small{color:var(--mut)}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:99px;border:1px solid currentColor;margin-left:6px}
+.sec{display:flex;align-items:center;gap:10px;margin:10px 0;font-size:14px}
+.sec span:first-child{width:110px}
+.sb{flex:1;height:8px;background:var(--line);border-radius:9px;position:relative}
+.sb i{position:absolute;top:0;height:100%;border-radius:9px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+select,input,textarea{background:var(--card);color:var(--tx);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:inherit;width:100%}
+.tools select,.tools input{width:auto;flex:1;min-width:140px}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--g);border-color:transparent}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:10px 8px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{color:var(--mut);font-weight:500;font-size:12px}
+.tw{overflow-x:auto}
+.rev{font-size:14px}
+.rev q{display:block;margin-bottom:10px}
+.rev small{color:var(--mut)}
+.stars{color:var(--yel);letter-spacing:2px}
+form label{display:block;font-size:13px;color:var(--mut);margin:12px 0 4px}
+.err{color:var(--red);font-size:12px;min-height:16px}
+.bad{border-color:var(--red)!important}
+#ok{display:none;margin-top:12px;color:var(--g2);font-weight:600}
+footer{border-top:1px solid var(--line);padding:24px 0 40px;color:var(--mut);font-size:12px}
+@media(min-width:700px){.menu,.rv{grid-template-columns:repeat(3,1fr)}.two{grid-template-columns:1fr 1fr}.fgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="warn">⚠ Данные примерные и не являются инвестиционной рекомендацией.</div>
+<header><div class="wrap bar">
+  <a class="logo" href="#top"><i></i>Радар Рынка</a>
+  <nav><a href="#menu">Обзор</a><a href="#news">Новости</a><a href="#companies">Компании</a><a href="#reviews">Отзывы</a><a href="#contact">Контакты</a></nav>
+  <div class="theme" id="theme"><button data-t="light">Светлая</button><button data-t="dark" class="on">Тёмная</button><button data-t="auto">Авто</button></div>
+</div></header>
+
+<main id="top">
+<div class="wrap hero">
+  <h1>Новости → акции: <span>что может двинуть рынок</span></h1>
+  <p>Собираем официальные мировые и российские новости, находим события, влияющие на акции Мосбиржи, и показываем условный прогноз: вырастут, останутся на месте или упадут.</p>
+  <a class="btn" href="#companies">Смотреть прогноз</a><a class="btn o" href="#contact">Связаться</a>
+  <div class="stats">
+    <div class="stat"><b>128</b><small>новостей</small></div>
+    <div class="stat"><b>14</b><small>событий</small></div>
+    <div class="stat"><b>9 / 5</b><small>вверх / вниз</small></div>
+  </div>
+</div>
+
+<section id="menu"><div class="wrap">
+  <h2>Меню</h2><p class="sub">Три основных раздела сервиса.</p>
+  <div class="grid menu">
+    <a class="card" href="#news"><div class="ic">📰</div><h3>Новости</h3><p>Лента из официальных источников и оценка влияния на бумаги.</p></a>
+    <a class="card" href="#companies"><div class="ic">📈</div><h3>Компании</h3><p>Сигнал, вероятность роста и состояние компании по каждой акции.</p></a>
+    <a class="card" href="#method"><div class="ic">🧮</div><h3>Методика</h3><p>Как новости превращаются в прогноз: простые правила, шкала 35–65%.</p></a>
+  </div>
+</div></section>
+
+<section id="news"><div class="wrap">
+  <h2>Новостной фон</h2><p class="sub">Усреднённый сигнал по всем бумагам. Это не прогноз индекса.</p>
+  <div class="card"><div class="gl"><span>Негатив</span><span>Нейтрально</span><span>Позитив</span></div>
+    <div class="gauge"><i></i></div><small style="color:var(--mut)">Сейчас: умеренно позитивный фон</small></div>
+
+  <div class="grid two" style="margin-top:14px">
+    <div class="card"><h2 class="up" style="font-size:18px">▲ Вероятнее рост</h2><div id="upl"></div></div>
+    <div class="card"><h2 class="dn" style="font-size:18px">▼ Вероятнее снижение</h2><div id="dnl"></div></div>
+  </div>
+
+  <div class="grid two" style="margin-top:14px">
+    <div class="card"><h2 style="font-size:18px">Главные события</h2>
+      <div class="ev">ЦБ РФ сохранил ключевую ставку <span class="tag up">банки ▲</span><br><small>Банк России · сегодня</small></div>
+      <div class="ev">Рост цен на нефть Brent <span class="tag up">нефтегаз ▲</span><br><small>Мировые новости · сегодня</small></div>
+      <div class="ev">Новые ограничения на экспорт металлов <span class="tag dn">металлы ▼</span><br><small>Официальные источники · вчера</small></div>
+    </div>
+    <div class="card" id="method"><h2 style="font-size:18px">Отрасли</h2><p class="sub" style="margin-bottom:4px">Средний сигнал: от −1 до +1.</p><div id="secs"></div></div>
+  </div>
+</div></section>
+
+<section id="companies"><div class="wrap">
+  <h2>Компании</h2>
+  <div class="tools">
+    <input id="q" placeholder="Поиск по тикеру или названию">
+    <select id="f"><option value="">Любой прогноз</option><option value="up">Рост</option><option value="fl">На месте</option><option value="dn">Снижение</option></select>
+    <select id="s"><option value="p">По вероятности роста</option><option value="n">По названию</option><option value="c">По цене</option></select>
+  </div>
+  <div class="card tw"><table><thead><tr><th>Тикер</th><th>Компания</th><th>Цена, ₽</th><th>30 дн.</th><th>Прогноз</th><th>Вер. роста</th></tr></thead><tbody id="tb"></tbody></table></div>
+</div></section>
+
+<section id="reviews"><div class="wrap">
+  <h2>Отзывы</h2><p class="sub">Что говорят инвесторы и аналитики.</p>
+  <div class="grid rv">
+    <div class="card rev"><div class="stars">★★★★★</div><q>Удобно видеть сразу новость и её влияние на бумагу. Экономит время на утреннем обзоре.</q><small>Алексей, частный инвестор</small></div>
+    <div class="card rev"><div class="stars">★★★★★</div><q>Простая и честная методика, без обещаний «гарантированной доходности». Это ценно.</q><small>Марина, аналитик</small></div>
+    <div class="card rev"><div class="stars">★★★★☆</div><q>Хороший отправной пункт для идей. Хотелось бы больше источников и дивиденды.</q><small>Игорь, трейдер</small></div>
+  </div>
+</div></section>
+
+<section id="contact"><div class="wrap">
+  <h2>Обратная связь</h2><p class="sub">Напишите нам — ответим на почту.</p>
+  <form class="card" id="form" novalidate style="max-width:640px">
+    <div class="grid fgrid">
+      <div><label for="n">Имя</label><input id="n" placeholder="Иван"><div class="err" id="en"></div></div>
+      <div><label for="e">Email</label><input id="e" type="email" placeholder="you@mail.ru"><div class="err" id="ee"></div></div>
+    </div>
+    <label for="m">Сообщение</label><textarea id="m" rows="4" placeholder="Ваш вопрос или идея"></textarea><div class="err" id="em"></div>
+    <label style="display:flex;gap:8px;align-items:center"><input id="c" type="checkbox" style="width:auto"> Согласен на обработку данных</label><div class="err" id="ec"></div>
+    <button class="btn" type="submit" style="margin-top:8px">Отправить</button>
+    <div id="ok">✓ Спасибо! Сообщение отправлено.</div>
+  </form>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <p><b>Важно:</b> все данные, оценки и прогнозы — примерные, получены автоматически и могут быть неточными. Материалы не являются инвестиционной рекомендацией, офертой или советом покупать либо продавать ценные бумаги. Решения вы принимаете на свой риск.</p>
+  <p style="margin-top:10px">Новости — публичные ленты изданий. Рыночные данные — Мосбиржа, с задержкой не менее 15 минут. © 2026 «Радар Рынка» · 18+</p>
+</div></footer>
+
+<script>
+// Демо-данные (замените на реальные из вашего API)
+const D=[["SBER","Сбербанк",312.4,[1,2,1,3,4,3,5,6],.64],["GAZP","Газпром",128.9,[5,4,4,3,3,2,2,1],.38],["LKOH","Лукойл",7120,[2,3,3,4,4,5,5,6],.61],["GMKN","Норникель",118.6,[4,5,4,3,3,3,2,2],.42],["YDEX","Яндекс",4210,[1,2,3,3,4,5,5,6],.63],["ROSN","Роснефть",561.2,[3,3,4,4,3,4,4,5],.55],["MTSS","МТС",224.7,[3,3,3,3,3,3,3,3],.50],["MGNT","Магнит",4380,[5,5,4,4,3,3,3,2],.40]];
+const $=s=>document.querySelector(s);
+const cls=p=>p>=.55?"up":p<=.45?"dn":"fl";
+const lbl=p=>p>=.55?"▲ Рост":p<=.45?"▼ Снижение":"► На месте";
+const spark=a=>{const mx=Math.max(...a),mn=Math.min(...a),pts=a.map((v,i)=>`${i*10},${22-(v-mn)/((mx-mn)||1)*20}`).join(" ");const c=a[a.length-1]>=a[0]?"#2ed151":"#e5484d";return `<svg width="70" height="24" viewBox="0 0 70 24"><polyline fill="none" stroke="${c}" stroke-width="2" points="${pts}"/></svg>`};
+function top(){const s=[...D].sort((a,b)=>b[4]-a[4]);const r=(x)=>`<div class="row"><span class="tk">${x[0]}</span><span class="nm">${x[1]}</span><b class="${cls(x[4])}">${Math.round(x[4]*100)}%</b></div>`;
+$("#upl").innerHTML=s.slice(0,3).map(r).join("");$("#dnl").innerHTML=s.slice(-3).reverse().map(r).join("")}
+function table(){const q=$("#q").value.toLowerCase(),f=$("#f").value,s=$("#s").value;
+let l=D.filter(x=>(x[0]+x[1]).toLowerCase().includes(q)&&(!f||cls(x[4])===f));
+l.sort((a,b)=>s==="n"?a[1].localeCompare(b[1]):s==="c"?b[2]-a[2]:b[4]-a[4]);
+$("#tb").innerHTML=l.map(x=>`<tr><td><b>${x[0]}</b></td><td>${x[1]}</td><td>${x[2]}</td><td>${spark(x[3])}</td><td class="${cls(x[4])}">${lbl(x[4])}</td><td>${Math.round(x[4]*100)}%</td></tr>`).join("")||`<tr><td colspan="6">Ничего не найдено</td></tr>`}
+[["Банки",.4],["Нефтегаз",.25],["Металлы",-.35],["IT",.5],["Ритейл",-.1]].forEach(([n,v])=>{const w=Math.abs(v)*50;$("#secs").insertAdjacentHTML("beforeend",`<div class="sec"><span>${n}</span><div class="sb"><i style="${v>=0?"left:50%":"right:50%"};width:${w}%;background:${v>=0?"var(--g2)":"var(--red)"}"></i></div><b class="${v>=0?"up":"dn"}">${v>0?"+":""}${v}</b></div>`)});
+["q","f","s"].forEach(i=>$("#"+i).addEventListener("input",table));
+top();table();
+
+// Тема
+const root=document.documentElement,mq=matchMedia("(prefers-color-scheme: dark)");
+function setTheme(t){document.querySelectorAll("#theme button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));root.dataset.theme=t==="auto"?(mq.matches?"dark":"light"):t}
+document.querySelectorAll("#theme button").forEach(b=>b.onclick=()=>setTheme(b.dataset.t));
+
+// Валидация формы
+$("#form").addEventListener("submit",e=>{e.preventDefault();let ok=true;
+const chk=(id,er,bad,msg)=>{$("#"+er).textContent=bad?msg:"";$("#"+id).classList.toggle("bad",bad);if(bad)ok=false};
+chk("n","en",$("#n").value.trim().length<2,"Введите имя (мин. 2 символа)");
+chk("e","ee",!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test($("#e").value.trim()),"Введите корректный email");
+chk("m","em",$("#m").value.trim().length<10,"Сообщение — минимум 10 символов");
+chk("c","ec",!$("#c").checked,"Необходимо согласие");
+$("#ok").style.display=ok?"block":"none";if(ok)e.target.reset()});
+</script>
+</body>
+</html>
